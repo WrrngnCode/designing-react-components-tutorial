@@ -1,46 +1,112 @@
-import React, { useContext } from 'react'
-import SpeakerContext from './speakerContext'
+import React, { useContext, useState, useEffect, useReducer } from 'react';
+import Speaker from './Speaker';
+import SpeakerContext from './speakerContext';
+import SpeakerSearchBar from './SpeakerSearchBar';
+import axios from 'axios';
+import { GET_ALL_SUCCESS, GET_ALL_FAILURE, PUT_SUCCESS, PUT_FAILURE } from '../actions/request';
 
-export default function Speakers() {
+import requestReducer, { REQUEST_STATUS } from '../reducer/request';
 
-  const speakers = useContext(SpeakerContext)
 
+const Speakers = () => {
+
+  const [searchQuery, setSearchQuery] = useState('');
+
+
+  const [{ records: speakers, status, error }, dispatch] = useReducer(requestReducer, {
+    records: [],
+    status: REQUEST_STATUS.LOADING,
+    error: null,
+  });
+
+  //const [status, setStatus] = useState(REQUEST_STATUS.LOADING);
+
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        let response = await axios.get('http://localhost:4000/speakers');
+
+        dispatch({
+          records: response.data,
+          type: GET_ALL_SUCCESS,
+        })
+      }
+
+      catch (e) {
+        console.log('loading data error')
+        dispatch({
+          status: REQUEST_STATUS.ERROR,
+          type: GET_ALL_FAILURE,
+          error: e,
+        })
+      }
+    }
+
+    fetchData();
+
+  }, []);
+
+
+  function toggleSpeakerFavorite(rec) {
+    return { ...rec, isFavorite: !rec.isFavorite }
+  }
+
+  async function onFavoriteToggleHandler(speakerRec) {    
+    try {
+      const toggledSpeakerRec = toggleSpeakerFavorite(speakerRec);    
+      await axios.put(`http://localhost:4000/speakers/${speakerRec.id}`)
+      dispatch({
+        type:PUT_SUCCESS,
+        record:toggledSpeakerRec
+      });
+    } catch (e) {
+      dispatch({
+        type:PUT_FAILURE,
+        error:e
+      });
+
+    }
+  }
+
+  const success = status === REQUEST_STATUS.SUCCESS;
+  const isLoading = status === REQUEST_STATUS.LOADING;
+  const hasErrored = status === REQUEST_STATUS.ERROR;
+
+  
   return (
     <div>
+      <SpeakerSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
 
-      <div className="mb-6 ">
-        <input
-          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-          id="username"
-          type="text"
-          placeholder="Search by name"
-        />
-      </div>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-12">
-        {speakers.map(({ id, firstName, lastName, bio, isFavorite }) => (
-          <div className="rounded overflow-hidden shadow-lg p-6" key={id}>
-            <div className="grid grid-cols-4 mb-6">
-              <div className="font-bold text-lg col-span-3">{`${firstName} ${lastName}`}</div>
-              <div className="flex justify-end">
-                <div
-                  className={isFavorite ? 'heartredbutton' : 'heartdarkbutton'}
-                ></div>
-              </div>
-            </div>
-            <div className="mb-6">
-              <img
-                src={`/speakers/speaker-${id}.jpg`}
-                alt={`${firstName} ${lastName}`}
-              />
-            </div>
-            <div className="text-gray-600">{bio.substr(0, 70) + '...'}</div>
-          </div>
-        ))}
-      </div>
+      {isLoading && <div>Loading...</div>}
+
+      {hasErrored && (
+        <div>
+          Loading error... Is the json-server running? (try `&#34`npm run
+          json-server `&#34` at terminal prompt)
+          <br />
+          <b>ERROR: {error.message}</b>
+        </div>
+      )}
+
+      {success &&
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 grid-cols-1 gap-12">
+          {speakers.filter((rec) => {
+            const targetString = `${rec.firstName} ${rec.lastName}`.toLowerCase();
+            return searchQuery.length === 0 ? true : targetString.includes(searchQuery.toLowerCase())
+          })
+            .map((speaker) => (
+              <Speaker key={speaker.id} {...speaker} onFavoriteToggle={() => onFavoriteToggleHandler(speaker)} />
+            ))}
+        </div>
+      }
     </div>
   )
 }
 
+
+export default Speakers;
 
 
 

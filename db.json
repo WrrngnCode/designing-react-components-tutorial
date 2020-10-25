@@ -1,0 +1,94 @@
+{
+  "speakers": [
+    {
+      "id": 1530,
+      "firstName": "Tamara",
+      "lastName": "Baker",
+      "sat": false,
+      "sun": true,
+      "isFavorite": false,
+      "bio": "Tammy has held a number of executive and management roles over the past 15 years, including VP engineering Roles at Molekule Inc., Cantaloupe Systems, E-Color, and Untangle Inc."
+    },
+    {
+      "id": 5996,
+      "firstName": "Craig",
+      "lastName": "Berntson",
+      "isFavorite": true,
+      "bio": "Craig has a passion for community and helping other developers improve their skills. He writes the column \"Software Gardening\" in DotNet Curry Magazine and is the co-author of \"Continuous Integration in .NET\" available from Manning.",
+      "sat": true,
+      "sun": true
+    },
+    {
+      "id": 10803,
+      "firstName": "Eugene",
+      "lastName": "Chuvyrov",
+      "sat": true,
+      "sun": false,
+      "isFavorite": true,
+      "bio": "Eugene Chuvyrov is  a Senior Cloud Architect at Microsoft. He works directly with both startups and enterprises to enable their solutions in Microsoft cloud, and to make Azure better as a result of this work with partners."
+    },
+    {
+      "id": 1124
+    },
+    {
+      "id": 41808
+    },
+    {
+      "id": 1269
+    },
+    {
+      "id": 1725
+    },
+    {
+      "id": 18805,
+      "firstName": "Mickey W.",
+      "lastName": "Mantle",
+      "sat": true,
+      "sun": true,
+      "isFavorite": false,
+      "bio": "Mickey has been developing software systems and products for over 40 years, as a systems programmer, Tech Lead, Manager, VP Engineering, CTO, COO, and now CEO/CTO of his own company."
+    },
+    {
+      "id": 8367,
+      "firstName": "Gayle Laakmann",
+      "lastName": "McDowell",
+      "sat": true,
+      "sun": false,
+      "isFavorite": false,
+      "bio": "Gayle Laakmann McDowell is the founder and CEO of CareerCup.com and the author of three best selling books."
+    },
+    {
+      "id": 187,
+      "firstName": "Dave",
+      "lastName": "Nielsen",
+      "isFavorite": false,
+      "bio": "As Head of Ecosystem Programs, Dave uses emerging technologies and open source projects like Microservices, Serverless & Kubernetes to bring the magic of Redis to the broader community.",
+      "sat": true,
+      "sun": true
+    },
+    {
+      "id": 823
+    },
+    {
+      "id": 8590,
+      "firstName": "Chris",
+      "lastName": "Richardson",
+      "isFavorite": false,
+      "bio": "Chris Richardson is a developer and architect. He is a Java Champion, a JavaOne rock star and the author of POJOs in Action, which describes how to build enterprise Java applications with frameworks such as Spring and Hibernate.",
+      "sat": true,
+      "sun": false
+    },
+    {
+      "id": 10808
+    },
+    {
+      "id": 6548,
+      "firstName": "Steve",
+      "lastName": "Souders",
+      "sat": true,
+      "sun": false,
+      "isFavorite": false,
+      "bio": "Steve works at SpeedCurve on the interplay between performance and design. He previously served as Google's Head Performance Engineer, Chief Performance Yahoo!, and Chief Performance Officer at Fastly."
+    }
+  ]
+}
