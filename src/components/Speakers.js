@@ -1,80 +1,27 @@
-import React, { useContext, useState, useEffect, useReducer } from 'react';
+import React, { useContext, useState } from 'react';
 import Speaker from './Speaker';
-import SpeakerContext from './speakerContext';
+import { DataContext, DataProvider } from '../contexts/DataContext';
+
 import SpeakerSearchBar from './SpeakerSearchBar';
-import axios from 'axios';
-import { GET_ALL_SUCCESS, GET_ALL_FAILURE, PUT_SUCCESS, PUT_FAILURE } from '../actions/request';
 
-import requestReducer, { REQUEST_STATUS } from '../reducer/request';
+import { REQUEST_STATUS } from '../reducer/request';
 
 
-const Speakers = () => {
+const SpeakersComponent = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
+  const { records: speakers, status, error, put } = useContext(DataContext)
 
 
-  const [{ records: speakers, status, error }, dispatch] = useReducer(requestReducer, {
-    records: [],
-    status: REQUEST_STATUS.LOADING,
-    error: null,
-  });
-
-  //const [status, setStatus] = useState(REQUEST_STATUS.LOADING);
-
-
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response = await axios.get('http://localhost:4000/speakers');
-
-        dispatch({
-          records: response.data,
-          type: GET_ALL_SUCCESS,
-        })
-      }
-
-      catch (e) {
-        console.log('loading data error')
-        dispatch({
-          status: REQUEST_STATUS.ERROR,
-          type: GET_ALL_FAILURE,
-          error: e,
-        })
-      }
-    }
-
-    fetchData();
-
-  }, []);
-
-
-  function toggleSpeakerFavorite(rec) {
-    return { ...rec, isFavorite: !rec.isFavorite }
-  }
-
-  async function onFavoriteToggleHandler(speakerRec) {    
-    try {
-      const toggledSpeakerRec = toggleSpeakerFavorite(speakerRec);    
-      await axios.put(`http://localhost:4000/speakers/${speakerRec.id}`)
-      dispatch({
-        type:PUT_SUCCESS,
-        record:toggledSpeakerRec
-      });
-    } catch (e) {
-      dispatch({
-        type:PUT_FAILURE,
-        error:e
-      });
-
-    }
+  async function onFavoriteToggleHandler(speakerRec) {
+    put({ ...speakerRec, isFavorite: !speakerRec.isFavorite })
   }
 
   const success = status === REQUEST_STATUS.SUCCESS;
   const isLoading = status === REQUEST_STATUS.LOADING;
   const hasErrored = status === REQUEST_STATUS.ERROR;
 
-  
+
   return (
     <div>
       <SpeakerSearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -106,12 +53,18 @@ const Speakers = () => {
 }
 
 
+
+
+const Speakers = (props) => {
+  return (
+    <DataProvider baseUrl={'http://localhost:4000'} routeName={'speakers'}>
+      <SpeakersComponent {...props}></SpeakersComponent>
+    </DataProvider>
+  );
+};
+
+
 export default Speakers;
-
-
-
-
-
 
 
 
