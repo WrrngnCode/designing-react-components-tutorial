@@ -1,7 +1,6 @@
-import React from 'react';
+
 import Speakers from '../src/components/Speakers';
 import Layout from '../src/components/Layout';
-
 
 function Page() {
 

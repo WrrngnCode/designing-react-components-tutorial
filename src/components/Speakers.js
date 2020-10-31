@@ -1,21 +1,23 @@
 import React, { useContext, useState } from 'react';
-import Speaker from './Speaker';
 import { DataContext, DataProvider } from '../contexts/DataContext';
 
 import SpeakerSearchBar from './SpeakerSearchBar';
+import Speaker from './Speaker';
 
 import { REQUEST_STATUS } from '../reducer/request';
+
+
 
 
 const SpeakersComponent = () => {
 
   const [searchQuery, setSearchQuery] = useState('');
-  const { records: speakers, status, error, put } = useContext(DataContext)
+  const { records: speakers, status, error, put } = useContext(DataContext);
 
 
-  async function onFavoriteToggleHandler(speakerRec) {
-    put({ ...speakerRec, isFavorite: !speakerRec.isFavorite })
-  }
+  // async function onFavoriteToggleHandler(speakerRec) {
+  //   put({ ...speakerRec, isFavorite: !speakerRec.isFavorite })
+  // }
 
   const success = status === REQUEST_STATUS.SUCCESS;
   const isLoading = status === REQUEST_STATUS.LOADING;
@@ -44,7 +46,10 @@ const SpeakersComponent = () => {
             return searchQuery.length === 0 ? true : targetString.includes(searchQuery.toLowerCase())
           })
             .map((speaker) => (
-              <Speaker key={speaker.id} {...speaker} onFavoriteToggle={() => onFavoriteToggleHandler(speaker)} />
+              <Speaker key={speaker.id} {...speaker} 
+              //onFavoriteToggle={() => onFavoriteToggleHandler(speaker)}
+              put={put}
+              />
             ))}
         </div>
       }
@@ -53,11 +58,9 @@ const SpeakersComponent = () => {
 }
 
 
-
-
 const Speakers = (props) => {
   return (
-    <DataProvider baseUrl={'http://localhost:4000'} routeName={'speakers'}>
+    <DataProvider baseUrl="http://localhost:4000" routeName="speakers">
       <SpeakersComponent {...props}></SpeakersComponent>
     </DataProvider>
   );

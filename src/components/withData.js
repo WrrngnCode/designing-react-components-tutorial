@@ -12,6 +12,9 @@ const withData = (maxSpeakersToShow) => (Component) => {
     return <Component speakers={limitSpeakers}></Component>
   }
 }
+
+
+
 export default withData;
 
 
