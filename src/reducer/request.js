@@ -6,7 +6,6 @@ export const REQUEST_STATUS = {
   ERROR: "error"
 }
 
-
 const requestReducer = (state, action) => {
   switch (action.type) {
 
